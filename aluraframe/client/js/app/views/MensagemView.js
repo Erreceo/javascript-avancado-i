@@ -5,7 +5,7 @@ class MensagemView extends View {
     }
 
     template(model){
-        return `<p class="alert alert-info">${model.texto}</p>`;
+        return model.texto == undefined || model.texto == ''  ? `<p></p>`:`<p class="alert alert-info">${model.texto}</p>`;
     }
 
 }
