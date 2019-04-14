@@ -27,8 +27,7 @@
 
         <button class="btn btn-primary" type="submit" onclick="sendPost(event)">Enviar dados para servidor</button>
     </form>
-    <script src="js/app/helpers/DateHelper.js"></script>
-    <script src="js/app/models/Negociacao.js"></script>
+    <script src="js/app/services/HttpService.js"></script>
     <script>
 
         function sendPost(event) {
@@ -43,27 +42,24 @@
             this._quantidade = $("#quantidade");
             this._valor = $("#valor");
             //construir o json
-            let negociacao = new Negociacao( new Date(this._data.value),  this._quantidade.value, this._valor.value);
-            //enviar o XMLHttpRequest
+            let negociacao = {
+                data : this._data.value,
+                quantidade : this._quantidade.value,
+                valor : this._valor.value
+            };
 
-            let xhr = new XMLHttpRequest();
-            xhr.open('POST', '/negociacoes', true);
-            xhr.setRequestHeader('Content-type', 'application/json');
-            xhr.onreadystatechange = () => {
-                if ( xhr.readyState == 4 ) {
-                    if ( xhr.status = 200 ) {
-                      
+                new HttpService()
+                    .post('/negociacoes', negociacao)
+                    .then( () => {
                         this._data.value = '';
                         this._quantidade.value = 1;
                         this._valor.value = 0.1;
                         alert("dados enviados com sucesso");
-                    }else{
-                        console.log("erro ao enviar os dados");
-                    }
-                }
-            };
-
-            xhr.send(JSON.stringify(negociacao));
+                    } )
+                    .catch((erro) => {
+                        console.log(erro);
+                        alert("erro ao enviar os dados");
+                    })
 
 
 
