@@ -76,7 +76,7 @@ class NegociacaoController {
 
     apaga(){
        
-       return this._service
+        this._service
             .apaga()
             .then()
             .then(mensagem => {
